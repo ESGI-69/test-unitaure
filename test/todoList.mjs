@@ -72,8 +72,8 @@ describe('add items to todo list', () => {
 
   it('should return false if last two items had been added less than 30min ago', () => {
     const item = new Item("one", new Date());
-    const itemTwo = new Item("one", new Date());
-    const itemThree = new Item("one", new Date());
+    const itemTwo = new Item("twop", new Date());
+    const itemThree = new Item("threee", new Date());
 
     todoList.addItem(item);
     todoList.addItem(itemTwo);
@@ -83,6 +83,61 @@ describe('add items to todo list', () => {
   });
 
   it('should return false if the user is not valid', () => {
+    //todo ?
+  });
+
+  it('should return true and send a mail when you added the 8th item to the todolist', () => {
+    const item = new Item("one", new Date());
+    const itemTwo = new Item("twop", new Date());
+    const itemThree = new Item("threee", new Date());
+    const itemFour = new Item("four", new Date());
+    const itemFive = new Item("five", new Date());
+    const itemSix = new Item("six", new Date());
+    const itemSeven = new Item("seven", new Date());
+    const itemEight = new Item("eight", new Date());
+
+    todoList.addItem(item);
+    todoList.addItem(itemTwo);
+    todoList.addItem(itemThree);
+    todoList.addItem(itemFour);
+    todoList.addItem(itemFive);
+    todoList.addItem(itemSix);
+    todoList.addItem(itemSeven);
+    const result = todoList.addItem(itemEight);
+
+    // mock the mail function
+    // assert that the mail function was called
+
+    assert.strictEqual(result, true);
+
+  });
+
+  it('should return false if you try to add more than 10 items to the todolist', () => {
+    const item = new Item("one", new Date());
+    const itemTwo = new Item("twop", new Date());
+    const itemThree = new Item("threee", new Date());
+    const itemFour = new Item("four", new Date());
+    const itemFive = new Item("five", new Date());
+    const itemSix = new Item("six", new Date());
+    const itemSeven = new Item("seven", new Date());
+    const itemEight = new Item("eight", new Date());
+    const itemNine = new Item("nine", new Date());
+    const itemTen = new Item("ten", new Date());
+    const itemEleven = new Item("eleven", new Date());
+
+    todoList.addItem(item);
+    todoList.addItem(itemTwo);
+    todoList.addItem(itemThree);
+    todoList.addItem(itemFour);
+    todoList.addItem(itemFive);
+    todoList.addItem(itemSix);
+    todoList.addItem(itemSeven);
+    todoList.addItem(itemEight);
+    todoList.addItem(itemNine);
+    todoList.addItem(itemTen);
+    const result = todoList.addItem(itemEleven);
+
+    assert.strictEqual(result, false);
   });
 
 });
