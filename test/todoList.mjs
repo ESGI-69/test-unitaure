@@ -1,12 +1,16 @@
-import { describe, it } from 'node:test';
+import { describe, it, afterEach } from 'node:test';
 import assert from 'node:assert';
 
 import User from './../src/user.js';
 import TodoList from './../src/todoList.js';
-import Item from './../src/todoList.js';
+import TodoItem from './../src/todoItem.js';
 
 const user = new User('John', 'Doe', 'zabuza@gmail.com', new Date('1990-01-01'), 'Password123');
 const todoList = new TodoList('My todo list');
+
+afterEach(() => {
+  todoList.todos = [];
+});
 
 describe('Adding a new todo list on the user', () => {
   it('should return true if the user don\'t have any totoList registered', () => {
@@ -42,102 +46,139 @@ describe('Removing a todo list from the user', () => {
   });
 });
 
-// items
-describe('add items to todo list', () => {
-  it('should return true if the item is added', () => {
-    const item = new Item("one", new Date());
-    // const result = todoList.addItem(item);
-
-    assert.strictEqual(true, true);
+describe('Creating a TodoItem', () => {
+  it('should throw an exception if the description is more than 1000 characters', () => {
+    assert.throws(
+      () => {
+        new TodoItem('description test', 'a'.repeat(1001));
+      },
+      new Error('The description length must be under 1000 characters'),
+    );
   });
 
-  it('should return false if the name is not unique', () => {
-    const item = new Item("My first item", new Date());
-    // todolist should be populated with an item with the same name
-    // or
-    // const secondItem = new Item("My first item", new Date());
-    // todoList.addItem(secondItem);
-
-    // const result = todoList.addItem(item);
-
-    assert.strictEqual(false, false);
+  it('should throw an exception if the title is missing', () => {
+    assert.throws(
+      () => {
+        new TodoItem('', 'content');
+      },
+      new Error('The title is missing'),
+    );
+    assert.throws(
+      () => {
+        new TodoItem(undefined, 'content');
+      },
+      new Error('The title is missing'),
+    );
   });
 
-  it('should return false if the name is more than 1000 characters', () => {
-    const item = new Item("a".repeat(1001));
-    // const result = todoList.addItem(item);
+  it('should throw an exception if the description is missing', () => {
+    assert.throws(
+      () => {
+        new TodoItem('title', '');
+      },
+      new Error('The description is missing'),
+    );
+    assert.throws(
+      () => {
+        new TodoItem('title');
+      },
+      new Error('The description is missing'),
+    );
+  });
+});
 
-    assert.strictEqual(false, false);
+describe('Add TodoItem to TodoList', () => {
+  it('should throw an exception if the name is not unique', () => {
+    todoList.todos = [
+      new TodoItem('duplicated item', 'content'),
+    ];
+
+    assert.throws(
+      () => {
+        todoList.addNewTodo(new TodoItem('duplicated item', 'content'));
+      },
+      new Error('You already have a todo with this name'),
+    );
+
+    todoList.todos = [];
   });
 
-  it('should return false if last two items had been added less than 30min ago', () => {
-    const item = new Item("one", new Date());
-    const itemTwo = new Item("twop", new Date());
-    const itemThree = new Item("threee", new Date());
+  it('shouldn\'t throw an exception if the item is added', () => {
+    const item = new TodoItem('one', 'description');
 
-    // todoList.addItem(item);
-    // todoList.addItem(itemTwo);
-    // const result = todoList.addItem(itemThree);
-
-    assert.strictEqual(false, false);
+    assert.doesNotThrow(() => {
+      todoList.addNewTodo(item);
+    });
   });
 
-  it('should return false if the user is not valid', () => {
-    //todo ?
+  it('should throw an exception if last items had been added less than 30min ago', () => {
+    const itemTwo = new TodoItem("two", "description");
+
+    assert.throws(
+      () => {
+        todoList.addNewTodo(itemTwo)
+      },
+      new Error('You can\'t add a new todo before 30 minutes'),
+    );
   });
 
-  it('should return true and send a mail when you added the 8th item to the todolist', () => {
-    const item = new Item("one", new Date());
-    const itemTwo = new Item("twop", new Date());
-    const itemThree = new Item("threee", new Date());
-    const itemFour = new Item("four", new Date());
-    const itemFive = new Item("five", new Date());
-    const itemSix = new Item("six", new Date());
-    const itemSeven = new Item("seven", new Date());
-    const itemEight = new Item("eight", new Date());
-
-    // todoList.addItem(item);
-    // todoList.addItem(itemTwo);
-    // todoList.addItem(itemThree);
-    // todoList.addItem(itemFour);
-    // todoList.addItem(itemFive);
-    // todoList.addItem(itemSix);
-    // todoList.addItem(itemSeven);
-    // const result = todoList.addItem(itemEight);
-
-    // mock the mail function
-    // assert that the mail function was called
-
-    assert.strictEqual(true, true);
-
+  it('should throw an exception if the user is not valid', () => {
+    assert.throws(
+      () => {
+        new User('John', 'D', 'zabuza@gmail.com', new Date() - 86400000 * 18, 'Password123');
+      },
+      new Error('The user is not valid'),
+    );
   });
 
-  it('should return false if you try to add more than 10 items to the todolist', () => {
-    const item = new Item("one", new Date());
-    const itemTwo = new Item("twop", new Date());
-    const itemThree = new Item("threee", new Date());
-    const itemFour = new Item("four", new Date());
-    const itemFive = new Item("five", new Date());
-    const itemSix = new Item("six", new Date());
-    const itemSeven = new Item("seven", new Date());
-    const itemEight = new Item("eight", new Date());
-    const itemNine = new Item("nine", new Date());
-    const itemTen = new Item("ten", new Date());
-    const itemEleven = new Item("eleven", new Date());
+  // it('should return true and send a mail when you added the 8th item to the todolist', () => {
+  //   const item = new Item("one", new Date());
+  //   const itemTwo = new Item("twop", new Date());
+  //   const itemThree = new Item("threee", new Date());
+  //   const itemFour = new Item("four", new Date());
+  //   const itemFive = new Item("five", new Date());
+  //   const itemSix = new Item("six", new Date());
+  //   const itemSeven = new Item("seven", new Date());
+  //   const itemEight = new Item("eight", new Date());
 
-    // todoList.addItem(item);
-    // todoList.addItem(itemTwo);
-    // todoList.addItem(itemThree);
-    // todoList.addItem(itemFour);
-    // todoList.addItem(itemFive);
-    // todoList.addItem(itemSix);
-    // todoList.addItem(itemSeven);
-    // todoList.addItem(itemEight);
-    // todoList.addItem(itemNine);
-    // todoList.addItem(itemTen);
-    // const result = todoList.addItem(itemEleven);
+  //   // todoList.addItem(item);
+  //   // todoList.addItem(itemTwo);
+  //   // todoList.addItem(itemThree);
+  //   // todoList.addItem(itemFour);
+  //   // todoList.addItem(itemFive);
+  //   // todoList.addItem(itemSix);
+  //   // todoList.addItem(itemSeven);
+  //   // const result = todoList.addItem(itemEight);
 
-    assert.strictEqual(false, false);
+  //   // mock the mail function
+  //   // assert that the mail function was called
+
+  //   assert.strictEqual(true, true);
+
+  // });
+
+  it('should throw an exception if you try to add more than 10 items to the todolist', () => {
+    const items = [
+      new TodoItem('one', 'content'),
+      new TodoItem('twop', 'content'),
+      new TodoItem('threee', 'content'),
+      new TodoItem('four', 'content'),
+      new TodoItem('five', 'content'),
+      new TodoItem('six', 'content'),
+      new TodoItem('seven', 'content'),
+      new TodoItem('eight', 'content'),
+      new TodoItem('nine', 'content'),
+      new TodoItem('ten', 'content'),
+    ];
+
+    todoList.todos = [ ...items ];
+
+    assert.throws(
+      () => {
+        todoList.addNewTodo(new TodoItem('eleven', 'content'));
+      },
+      new Error('You can\'t have more than 10 todos'),
+    );
   });
 
 });
