@@ -1,5 +1,47 @@
 import TodoList from './../src/todoList.js';
 
+const isUserInfoValid = (firstname, lastname, email, birthdate, password) => {
+  if (firstname.length < 2 || firstname.length > 20) {
+    return false;
+  }
+
+  if (lastname.length < 2 || lastname.length > 20) {
+    return false;
+  }
+
+  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  if (!emailRegex.test(email)) {
+    return false;
+  }
+
+  const age = new Date().getFullYear() - birthdate.getFullYear();
+
+  if (age < 13) {
+    return false;
+  }
+
+  // Numbers regex
+  const numbersRegex = /[0-9]+/;
+
+  // Uppercase regex
+  const uppercaseRegex = /[A-Z]+/;
+
+  // lowercase regex
+  const lowercaseRegex = /[a-z]+/;
+
+  if (
+    password.length < 8
+    || password.length > 40
+    || !password.match(numbersRegex)
+    || !password.match(uppercaseRegex)
+    || !password.match(lowercaseRegex)
+  ) {
+    return false;
+  }
+
+  return true;
+};
+
 class User {
   /**
    * @param {string} firstname 
@@ -9,6 +51,9 @@ class User {
    * @param {string} password
    */
   constructor(firstname, lastname, email, birthdate, password) {
+    if (!isUserInfoValid(firstname, lastname, email, birthdate, password)) {
+      throw new Error('The user is not valid');
+    }
     this.firstname = firstname;
     this.lastname = lastname;
     this.email = email;
@@ -60,46 +105,6 @@ class User {
     this.todoLists.splice(index, 1);
     return true;
   };
-
-  isValid() {
-    if (this.firstname.length < 2 || this.firstname.length > 20) {
-      return false;
-    }
-
-    if (this.lastname.length < 2 || this.lastname.length > 20) {
-      return false;
-    }
-
-    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    if (!emailRegex.test(this.email)) {
-      return false;
-    }
-
-    if (this.age < 13) {
-      return false;
-    }
-
-    // Numbers regex
-    const numbersRegex = /[0-9]+/;
-
-    // Uppercase regex
-    const uppercaseRegex = /[A-Z]+/;
-
-    // lowercase regex
-    const lowercaseRegex = /[a-z]+/;
-
-    if (
-      this.password.length < 8
-      || this.password.length > 40
-      || !this.password.match(numbersRegex)
-      || !this.password.match(uppercaseRegex)
-      || !this.password.match(lowercaseRegex)
-    ) {
-      return false;
-    }
-
-    return true;
-  }
 }
 
 export default User;
