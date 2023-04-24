@@ -11,8 +11,11 @@ describe('TodoItem creation', () => {
   });
 
   it('shouldn\'t instantiate a new TodoItem if the content is too long', () => {
-    assert.throws(() => {
-      new TodoItem('Todo', 'This is a todo that is too long and should throw an error'.repeat(100));
-    });
+    assert.throws(
+      () => {
+        new TodoItem('Todo', 'This is a todo that is too long and should throw an error'.repeat(100));
+      },
+      new Error('The description length must be under 1000 characters'),
+    );
   });
 });

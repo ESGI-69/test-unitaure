@@ -17,68 +17,101 @@ describe('User creation', () => {
   });
   
   it('shouldn\'t instantiate a new User if the user is under 13yo', () => {
-    assert.throws(() => {
-      new User('John', 'Doe', 'zabuza@gmail.com', new Date(new Date().setFullYear(new Date().getFullYear() - 12)), 'Password123');
-    });
+    assert.throws(
+      () => {
+        new User('John', 'Doe', 'zabuza@gmail.com', new Date(new Date().setFullYear(new Date().getFullYear() - 12)), 'Password123');
+      },
+      new Error('The user is not valid'),
+    );
   });
   
   it('shouldn\'t instantiate a new User if the user\'s firstname is too short', () => {
-    assert.throws(() => {
-      new User('J', 'Doe', 'zabuza@gmail.com', new Date('1990-01-01'), 'Password123');
-    });
+    assert.throws(
+      () => {
+        new User('J', 'Doe', 'zabuza@gmail.com', new Date('1990-01-01'), 'Password123');
+      },
+      new Error('The user is not valid'),
+    );
   });
   
   it('shouldn\'t instantiate a new User if the user\'s firstname is too long', () => {
-    assert.throws(() => {
-      new User('JhonJhonJhonJhonJhonJhon', 'Doe', 'zabuza@gmail.com', new Date('1990-01-01'), 'Password123');
-    });
+    assert.throws(
+      () => {
+        new User('JhonJhonJhonJhonJhonJhon', 'Doe', 'zabuza@gmail.com', new Date('1990-01-01'), 'Password123');
+      },
+      new Error('The user is not valid'),
+    );
   });
   
   it('shouldn\'t instantiate a new User if the user\'s lastname is too short', () => {
-    assert.throws(() => {
-      new User('Jhon', 'D', 'zabuza@gmail.com', new Date('1990-01-01'), 'Password123');
-    });
+    assert.throws(
+      () => {
+        new User('Jhon', 'D', 'zabuza@gmail.com', new Date('1990-01-01'), 'Password123');
+      },
+      new Error('The user is not valid'),
+    );
   });
   
   it('shouldn\'t instantiate a new User if the user\'s lastname is too long', () => {
-    assert.throws(() => {
-      new User('Jhon', 'DoeDoeDoeDoeDoeDoeDoe', 'zabuza@gmail.com', new Date('1990-01-01'), 'Password123');
-    });
+    assert.throws(
+      () => {
+        new User('Jhon', 'DoeDoeDoeDoeDoeDoeDoe', 'zabuza@gmail.com', new Date('1990-01-01'), 'Password123');
+      },
+      new Error('The user is not valid'),
+    );
   });
   
   it('shouldn\'t instantiate a new User if the user\'s email is not valid', () => {
-    assert.throws(() => {
-      new User('Jhon', 'Doe', 'zabuza', new Date('1990-01-01'), 'Password123');
-    });
+    assert.throws(
+      () => {
+        new User('Jhon', 'Doe', 'zabuza', new Date('1990-01-01'), 'Password123');
+      },
+      new Error('The user is not valid'),
+    );
   });
   
   it('shouldn\'t instantiate a new User if the user\'s password is too short', () => {
-    assert.throws(() => {
-      new User('Jhon', 'Doe', 'zabuza@gmail.com', new Date('1990-01-01'), 'Pa1');
-    });
+    assert.throws(
+      () => {
+        new User('Jhon', 'Doe', 'zabuza@gmail.com', new Date('1990-01-01'), 'Pa1');
+      },
+      new Error('The user is not valid'),
+    );
   });
   
   it('shouldn\'t instantiate a new User if the user\'s password is too long', () => {
-    assert.throws(() => {
-      new User('Jhon', 'Doe', 'zabuza@gmail.com', new Date('1990-01-01'), 'Password123Password123Password123Password123');
-    });
+    assert.throws(
+      () => {
+        new User('Jhon', 'Doe', 'zabuza@gmail.com', new Date('1990-01-01'), 'Password123Password123Password123Password123');
+      },
+      new Error('The user is not valid'),
+    );
   });
   
   it('shouldn\'t instantiate a new User if the user\'s password not containing a lowercase letter', () => {
-    assert.throws(() => {
-      new User('Jhon', 'Doe', 'zabuza@gmail.com', new Date('1990-01-01'), 'PASSWORD123');
-    });
+    assert.throws(
+      () => {
+        new User('Jhon', 'Doe', 'zabuza@gmail.com', new Date('1990-01-01'), 'PASSWORD123');
+      },
+      new Error('The user is not valid'),
+    );
   });
   
   it('shouldn\'t instantiate a new User if the user\'s password not containing a uppercase', () => {
-    assert.throws(() => {
-      new User('Jhon', 'Doe', 'zabuza@gmail.com', new Date('1990-01-01'), 'password123');
-    });
+    assert.throws(
+      () => {
+        new User('Jhon', 'Doe', 'zabuza@gmail.com', new Date('1990-01-01'), 'password123');
+      },
+      new Error('The user is not valid'),
+    );
   });
   
   it('shouldn\'t instantiate a new User if the user\'s password not containing a number', () => {
-    assert.throws(() => {
-      new User('Jhon', 'Doe', 'zabuza@gmail.com', new Date('1990-01-01'), 'Password');
-    });
+    assert.throws(
+      () => {
+        new User('Jhon', 'Doe', 'zabuza@gmail.com', new Date('1990-01-01'), 'Password');
+      },
+      new Error('The user is not valid'),
+    );
   });
 });

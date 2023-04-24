@@ -13,26 +13,50 @@ afterEach(() => {
 });
 
 describe('Adding a new todo list on the user', () => {
+  it('should throw an exception if the passed todo list is not an instance of TodoList', () => {
+    assert.throws(
+      () => {
+        user.addTodoList({})
+      },
+      new Error('The passed todo list is not an instance of TodoList'),
+    );
+  });
+
   it('should return true if the user don\'t have any totoList registered', () => {
     const result = user.addTodoList(todoList);
 
     assert.strictEqual(result, true);
   });
 
-  it('should throw an error if the user already has a todo list', () => {
+  it('should throw an exception if the user already has a todo list', () => {
     const unwantedTodoList = new TodoList('My unwanted todo list');
-    assert.throws(() => {user.addTodoList(unwantedTodoList)});
+    assert.throws(
+      () => {
+        user.addTodoList(unwantedTodoList)
+      },
+      new Error('You already have a todo list'),
+    );
   });
 });
 
 describe('Removing a todo list from the user', () => {
   it('should return an error if the passed todo list is not an instance of TodoList', () => {
-    assert.throws(() => {user.removeTodoList({})});
+    assert.throws(
+      () => {
+        user.removeTodoList({})
+      },
+      new Error('The todo list is not a TodoList class'),
+    );
   });
 
   it('should return an error if the passed todo list is not registered on the user', () => {
     const unwantedTodoList = new TodoList('My unwanted todo list');
-    assert.throws(() => {user.removeTodoList(unwantedTodoList)});
+    assert.throws(
+      () => {
+        user.removeTodoList(unwantedTodoList);
+      },
+      new Error('The todo list is not registered on the user'),
+    );
   });
 
   it('should return true if the user has a todo list', () => {
@@ -42,7 +66,12 @@ describe('Removing a todo list from the user', () => {
   });
 
   it('should throw an error if the user don\'t have any todo list', () => {
-    assert.throws(() => {user.removeTodoList(todoList)});
+    assert.throws(
+      () => {
+        user.removeTodoList(todoList);
+      },
+      new Error('The todo list is not registered on the user'),
+    );
   });
 });
 
