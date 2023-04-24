@@ -3,10 +3,15 @@ import assert from 'node:assert';
 
 import User from '../src/user.js';
 
-describe('The user isValid method', () => {
+describe('Checking if the user is valid', () => {
   it('should return true when the user is valid', () => {
     const user = new User('John', 'Doe', 'zabuza@gmail.com', new Date(new Date().setFullYear(new Date().getFullYear() - 30)), 'Password123');
   
+    assert.strictEqual(user.isValid(), true);
+  });
+
+  it('should return true when user exactly 13yo', () => {
+    const user = new User('John', 'Doe', 'zabuza@gmail.com', new Date(new Date().setFullYear(new Date().getFullYear() - 13)), 'Password123');
     assert.strictEqual(user.isValid(), true);
   });
   
@@ -14,11 +19,6 @@ describe('The user isValid method', () => {
     const user = new User('John', 'Doe', 'zabuza@gmail.com', new Date(new Date().setFullYear(new Date().getFullYear() - 12)), 'Password123');
   
     assert.strictEqual(user.isValid(), false);
-  });
-
-  it('should return true when user exactly 13yo', () => {
-    const user = new User('John', 'Doe', 'zabuza@gmail.com', new Date(new Date().setFullYear(new Date().getFullYear() - 13)), 'Password123');
-    assert.strictEqual(user.isValid(), true);
   });
   
   it('should return false when firstname is too short', () => {
