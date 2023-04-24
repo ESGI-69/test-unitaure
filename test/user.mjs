@@ -5,15 +5,20 @@ import User from '../src/user.js';
 
 describe('The user isValid method', () => {
   it('should return true when the user is valid', () => {
-    const user = new User('John', 'Doe', 'zabuza@gmail.com', new Date('1990-01-01'), 'Password123');
+    const user = new User('John', 'Doe', 'zabuza@gmail.com', new Date(new Date().setFullYear(new Date().getFullYear() - 30)), 'Password123');
   
     assert.strictEqual(user.isValid(), true);
   });
   
   it('should return false when under 13yo', () => {
-    const user = new User('John', 'Doe', 'zabuza@gmail.com', new Date('2021-01-01'), 'Password123');
+    const user = new User('John', 'Doe', 'zabuza@gmail.com', new Date(new Date().setFullYear(new Date().getFullYear() - 12)), 'Password123');
   
     assert.strictEqual(user.isValid(), false);
+  });
+
+  it('should return true when user exactly 13yo', () => {
+    const user = new User('John', 'Doe', 'zabuza@gmail.com', new Date(new Date().setFullYear(new Date().getFullYear() - 13)), 'Password123');
+    assert.strictEqual(user.isValid(), true);
   });
   
   it('should return false when firstname is too short', () => {
