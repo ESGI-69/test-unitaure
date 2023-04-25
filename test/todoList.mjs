@@ -1,5 +1,5 @@
 import { describe, it, afterEach } from 'node:test';
-import assert from 'node:assert';
+import { doesNotThrow, throws, strictEqual } from 'node:assert';
 
 import User from './../src/user.js';
 import TodoList from './../src/todoList.js';
@@ -14,7 +14,7 @@ afterEach(() => {
 
 describe('Adding a new todo list on the user', () => {
   it('should throw an exception if the passed todo list is not an instance of TodoList', () => {
-    assert.throws(
+    throws(
       () => {
         user.addTodoList({})
       },
@@ -25,12 +25,12 @@ describe('Adding a new todo list on the user', () => {
   it('should return true if the user don\'t have any totoList registered', () => {
     const result = user.addTodoList(todoList);
 
-    assert.strictEqual(result, true);
+    strictEqual(result, true);
   });
 
   it('should throw an exception if the user already has a todo list', () => {
     const unwantedTodoList = new TodoList('My unwanted todo list');
-    assert.throws(
+    throws(
       () => {
         user.addTodoList(unwantedTodoList)
       },
@@ -41,7 +41,7 @@ describe('Adding a new todo list on the user', () => {
 
 describe('Removing a todo list from the user', () => {
   it('should return an error if the passed todo list is not an instance of TodoList', () => {
-    assert.throws(
+    throws(
       () => {
         user.removeTodoList({})
       },
@@ -51,7 +51,7 @@ describe('Removing a todo list from the user', () => {
 
   it('should return an error if the passed todo list is not registered on the user', () => {
     const unwantedTodoList = new TodoList('My unwanted todo list');
-    assert.throws(
+    throws(
       () => {
         user.removeTodoList(unwantedTodoList);
       },
@@ -62,11 +62,11 @@ describe('Removing a todo list from the user', () => {
   it('should return true if the user has a todo list', () => {
     const result = user.removeTodoList(todoList);
 
-    assert.strictEqual(result, true);
+    strictEqual(result, true);
   });
 
   it('should throw an error if the user don\'t have any todo list', () => {
-    assert.throws(
+    throws(
       () => {
         user.removeTodoList(todoList);
       },
@@ -77,7 +77,7 @@ describe('Removing a todo list from the user', () => {
 
 describe('Creating a TodoItem', () => {
   it('should throw an exception if the description is more than 1000 characters', () => {
-    assert.throws(
+    throws(
       () => {
         new TodoItem('description test', 'a'.repeat(1001));
       },
@@ -86,13 +86,13 @@ describe('Creating a TodoItem', () => {
   });
 
   it('should throw an exception if the title is missing', () => {
-    assert.throws(
+    throws(
       () => {
         new TodoItem('', 'content');
       },
       new Error('The title is missing'),
     );
-    assert.throws(
+    throws(
       () => {
         new TodoItem(undefined, 'content');
       },
@@ -101,13 +101,13 @@ describe('Creating a TodoItem', () => {
   });
 
   it('should throw an exception if the description is missing', () => {
-    assert.throws(
+    throws(
       () => {
         new TodoItem('title', '');
       },
       new Error('The description is missing'),
     );
-    assert.throws(
+    throws(
       () => {
         new TodoItem('title');
       },
@@ -122,7 +122,7 @@ describe('Add TodoItem to TodoList', () => {
       new TodoItem('duplicated item', 'content'),
     ];
 
-    assert.throws(
+    throws(
       () => {
         todoList.addNewTodo(new TodoItem('duplicated item', 'content'));
       },
@@ -135,7 +135,7 @@ describe('Add TodoItem to TodoList', () => {
   it('shouldn\'t throw an exception if the item is added', () => {
     const item = new TodoItem('one', 'description');
 
-    assert.doesNotThrow(() => {
+    doesNotThrow(() => {
       todoList.addNewTodo(item);
     });
   });
@@ -143,7 +143,7 @@ describe('Add TodoItem to TodoList', () => {
   it('should throw an exception if last items had been added less than 30min ago', () => {
     const itemTwo = new TodoItem("two", "description");
 
-    assert.throws(
+    throws(
       () => {
         todoList.addNewTodo(itemTwo)
       },
@@ -152,7 +152,7 @@ describe('Add TodoItem to TodoList', () => {
   });
 
   it('should throw an exception if the user is not valid', () => {
-    assert.throws(
+    throws(
       () => {
         new User('John', 'D', 'zabuza@gmail.com', new Date() - 86400000 * 18, 'Password123');
       },
@@ -182,7 +182,7 @@ describe('Add TodoItem to TodoList', () => {
   //   // mock the mail function
   //   // assert that the mail function was called
 
-  //   assert.strictEqual(true, true);
+  //   strictEqual(true, true);
 
   // });
 
@@ -202,7 +202,7 @@ describe('Add TodoItem to TodoList', () => {
 
     todoList.todos = [ ...items ];
 
-    assert.throws(
+    throws(
       () => {
         todoList.addNewTodo(new TodoItem('eleven', 'content'));
       },
