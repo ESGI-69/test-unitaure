@@ -79,7 +79,7 @@ class User {
 
     // Check if the todo list is a TodoList class
     if (!(todoList instanceof TodoList)) {
-      throw new Error('The todo list is not a TodoList class');
+      throw new Error('The passed todo list is not an instance of TodoList');
     }
 
     this.todoLists.push(todoList);
@@ -99,7 +99,7 @@ class User {
 
     const index = this.todoLists.indexOf(todoList);
     if (index === -1) {
-      throw new Error('The todo list is not in the user todo lists');
+      throw new Error('The todo list is not registered on the user');
     }
 
     this.todoLists.splice(index, 1);
