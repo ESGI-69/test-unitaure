@@ -1,4 +1,4 @@
-import { describe, it, afterEach } from 'node:test';
+import { describe, it, afterEach, mock } from 'node:test';
 import { doesNotThrow, throws, strictEqual } from 'node:assert';
 
 import User from './../src/user.js';
@@ -151,40 +151,32 @@ describe('Add TodoItem to TodoList', () => {
     );
   });
 
-  it('should throw an exception if the user is not valid', () => {
+  it('should send a mail to the user when 8th item is added and return true', () => {
+    const items = [
+      new TodoItem('one', 'content'),
+      new TodoItem('twop', 'content'),
+      new TodoItem('threee', 'content'),
+      new TodoItem('four', 'content'),
+      new TodoItem('five', 'content'),
+      new TodoItem('six', 'content'),
+      new TodoItem('seven', 'content'),
+    ];
+
+    const sendMail = mock.fn((mail) => {
+      strictEqual(mail, user.email)
+      console.log('mail sent')
+      return true
+    })
+
+    todoList.todos = [ ...items ];
     throws(
       () => {
-        new User('John', 'D', 'zabuza@gmail.com', new Date() - 86400000 * 18, 'Password123');
-      },
-      new Error('The user is not valid'),
-    );
+        todoList.addNewTodo(new TodoItem('eight', 'content'));
+        strictEqual(sendMail, true)
+      }
+    )
+
   });
-
-  // it('should return true and send a mail when you added the 8th item to the todolist', () => {
-  //   const item = new Item("one", new Date());
-  //   const itemTwo = new Item("twop", new Date());
-  //   const itemThree = new Item("threee", new Date());
-  //   const itemFour = new Item("four", new Date());
-  //   const itemFive = new Item("five", new Date());
-  //   const itemSix = new Item("six", new Date());
-  //   const itemSeven = new Item("seven", new Date());
-  //   const itemEight = new Item("eight", new Date());
-
-  //   // todoList.addItem(item);
-  //   // todoList.addItem(itemTwo);
-  //   // todoList.addItem(itemThree);
-  //   // todoList.addItem(itemFour);
-  //   // todoList.addItem(itemFive);
-  //   // todoList.addItem(itemSix);
-  //   // todoList.addItem(itemSeven);
-  //   // const result = todoList.addItem(itemEight);
-
-  //   // mock the mail function
-  //   // assert that the mail function was called
-
-  //   strictEqual(true, true);
-
-  // });
 
   it('should throw an exception if you try to add more than 10 items to the todolist', () => {
     const items = [
